@@ -1,0 +1,10 @@
+.screen-banner{
+    height: 30px;
+    background-color: blue
+}
+
+.screen-text{
+    text-align: center;
+    color: white;
+    padding-top: 5px;
+}

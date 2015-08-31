@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<div id="user-info">
+    <div class="name">
+        <label>Name: </label>
+       {{input valueBinding="userName"}}
+        <span>
+        <label>Number Of seats: </label>
+        {{input valueBinding="numSeats" }}
+        </span>
+        </br>
+        <p align="center"><button {{action showSeats}} >Start Selecting</button></p>
+    </div>
+    {{#if basicInfoPresent}}
+        <div>
+            <div class="screen-banner">
+                <p class="screen-text">SCREEN</p>
+            </div>
+            <div class="seats">
+
+            </div>
+        </div>
+    {{/if}}
+</div>
+</body>
+</html>
