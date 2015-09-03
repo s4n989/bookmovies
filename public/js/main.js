@@ -12,7 +12,8 @@ require.config({
         text: 'libs/text-loader-plugin',
         ember_template: 'libs/ember-template-compiler',
         d3:'libs/d3.min',
-        Q:'libs/q'
+        Q:'libs/q',
+        jquerySeat:'libs/jquery.seat-charts.min'
     },
 
     shim: {

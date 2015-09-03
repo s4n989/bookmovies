@@ -7,25 +7,26 @@ define(['app', '../services/movieServices'], function (app, movieServices) {
         model: function () {
             return movieServices.getBookingStatus();
         },
-        setupControllers: function (controller, model) {
+        setupController: function (controller, model) {
             var rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-            var columnCount = 12;
-            var seats = [];
+            var columns = [1,2,3,4,5,6,7,8,9,10,11,12];
+            var seats = new Array();
             var bookedSeats = model.bookedSeats ? model.bookedSeats : [];
             for (var i = 0; i < rows.length; i++) {
-                for (var j = 0; j < columnCount; j++) {
+                for (var j = 0; j < columns.length; j++) {
                     if (bookedSeats.indexOf(rows[i] + j) > -1) {
-                        seats[i][j] = true;
+                        seats[i][j] = {booked: 1, selected: 0};
                     } else {
-                        seats[i][j] = false;
+                        if (!seats[i]) seats[i] = new Array();
+                        seats[i][j] = {booked: 0, selected: 1};
                     }
                 }
-            }
+            };
             controller.setProperties({
-                bookedSeats: bookedSeats,
-                seats: seats,
-                rows: rows,
-                columnCount: columnCount
+                "bookedSeats":bookedSeats,
+                "seats":seats,
+                "rows":rows,
+                "columns":columns
             })
         }
     });

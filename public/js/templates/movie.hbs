@@ -3,26 +3,43 @@
 <head>
     <meta charset="utf-8">
     <title>Dashboard</title>
+    <script type="text/javascript" src="/js/libs/jquery.seat-charts.min.js"></script>
 </head>
 <body>
 <div id="user-info">
     <div class="name">
         <label>Name: </label>
-       {{input valueBinding="userName"}}
+        {{input valueBinding="userName"}}
         <span>
         <label>Number Of seats: </label>
-        {{input valueBinding="numSeats" }}
+            {{input valueBinding="numSeats" }}
         </span>
         </br>
-        <p align="center"><button {{action showSeats}} >Start Selecting</button></p>
+        <p align="center">
+            <button {{action showSeats}} >Start Selecting</button>
+        </p>
     </div>
     {{#if basicInfoPresent}}
         <div>
-            <div class="screen-banner">
-                <p class="screen-text">SCREEN</p>
-            </div>
             <div class="seats">
+                <div class="demo">
+                    <div id="seat-map">
+                        <div class="front">SCREEN</div>
+                    </div>
+                    <div class="booking-details">
+                        <p>Movie: <span> Gingerclown</span></p>
+                        <p>Time: <span>November 3, 21:00</span></p>
+                        <p>Seat: </p>
+                        <ul id="selected-seats"></ul>
+                        <p>Tickets: <span id="counter">0</span></p>
+                        <p>Total: <b>$<span id="total">0</span></b></p>
 
+                        <button class="checkout-button">BUY</button>
+
+                        <div id="legend"></div>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
             </div>
         </div>
     {{/if}}
