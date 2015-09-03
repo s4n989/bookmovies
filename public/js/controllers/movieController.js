@@ -4,13 +4,16 @@
 
 define(['../app'], function (app, jquerySeat) {
     app.MovieController = Ember.ObjectController.extend({
-        basicInfoPresent: true,
+        basicInfoPresent: false,
         userName: "",
         numSeats: 0,
         rows: [],
         columns: [],
         bookedSeats: [],
+        currentSelection:[],
         seats: [],
+        sc:{},
+        bookingHistory: [],
         validateNumSeats: function () {
             var numSeats = this.get("numSeats");
             if (typeof numSeats != Number || numSeats > 50) {
@@ -19,83 +22,40 @@ define(['../app'], function (app, jquerySeat) {
         }.observes("numSeats"),
         actions: {
             showSeats: function () {
-                var price = 10;
                 var userName = this.get("userName");
                 var numberSeats = this.get("numSeats");
-                var recalculateTotal = function (sc) {
-                    var total = 0;
-                    sc.find('selected').each(function () {
-                        total += price;
-                    });
-
-                    return total;
-                };
                 if (userName && numberSeats > 0) {
-                    this.set("basicInfoPresent", true);
+                    $("#seats").css("visibility","visible");
                 } else {
                     alert("Either Name or Number of seats are entered incorrectly")
                 }
-                var $cart = $('#selected-seats'), //Sitting Area
-                    $counter = $('#counter'), //Votes
-                    $total = $('#total'); //Total money
+            },
+            submitSelection:function(){
+                var self = this;
+                var bookingHistory = this.get('bookingHistory') ? this.get('bookingHistory') : [];
+                bookingHistory.push({userName:self.get("userName"), total: self.get("currentSelection").length,selectedSeats:self.get("currentSelection")});
+                this.set("bookingHistory", bookingHistory);
+                var htmlData = "<table border='2' style='width: 20%'>" +
+                    "<th>Name</th>" +
+                    "<th>No Of Seats</th>" +
+                    "<th style='40%'>Seats</th>";
+                bookingHistory.forEach(function(booking){
+                    htmlData = htmlData +
+                        "<tr>" +
+                        "<td>"+ booking.userName+"</td>" +
+                        "<td>"+ booking.total+"</td>" +
+                        "<td>"+ booking.selectedSeats+"</td>" +
+                        "</tr>"
+                })
+                 htmlData = htmlData + "</table>";
+                $('#booking-history').html(htmlData);
 
-                var sc = $('#seat-map').seatCharts({
-                    map: [  //Seating chart
-                        'aaaaaaaaaa',
-                        'aaaaaaaaaa',
-                        '__________',
-                        'aaaaaaaa__',
-                        'aaaaaaaaaa',
-                        'aaaaaaaaaa',
-                        'aaaaaaaaaa',
-                        'aaaaaaaaaa',
-                        'aaaaaaaaaa',
-                        'aa__aa__aa'
-                    ],
-                    naming: {
-                        top: false,
-                        getLabel: function (character, row, column) {
-                            return column;
-                        }
-                    },
-                    legend: { //Definition legend
-                        node: $('#legend'),
-                        items: [
-                            [ 'a', 'available', 'Option' ],
-                            [ 'a', 'unavailable', 'Sold']
-                        ]
-                    },
-                    click: function () { //Click event
-                        if (this.status() == 'available') { //optional seat
-                            $('<li>R' + (this.settings.row + 1) + ' S' + this.settings.label + '</li>')
-                                .attr('id', 'cart-item-' + this.settings.id)
-                                .data('seatId', this.settings.id)
-                                .appendTo($cart);
-
-                            $counter.text(sc.find('selected').length + 1);
-                            $total.text(recalculateTotal(sc) + price);
-
-                            return 'selected';
-                        } else if (this.status() == 'selected') { //Checked
-                            //Update Number
-                            $counter.text(sc.find('selected').length - 1);
-                            //update totalnum
-                            $total.text(recalculateTotal(sc) - price);
-
-                            //Delete reservation
-                            $('#cart-item-' + this.settings.id).remove();
-                            //optional
-                            return 'available';
-                        } else if (this.status() == 'unavailable') { //sold
-                            return 'unavailable';
-                        } else {
-                            return this.style();
-                        }
-                    }
-                });
-                //sold seat
-                sc.get(['1_2', '4_4', '4_5', '6_6', '6_7', '8_5', '8_6', '8_7', '8_8', '10_1', '10_2']).status('unavailable');
-
+                var sc = this.get("sc");
+                sc.get(sc.find('selected').seatIds).status('unavailable');
+                self.set("currentSelection", []);
+                self.set("userName",'');
+                self.set("numSeats", 0);
+                $("#seats").css("visibility","hidden");
             }
         }
     });

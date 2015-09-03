@@ -21,6 +21,9 @@ require.config({
             deps: ['jquery','handlebars'],
             exports: 'Ember'
         },
+        jquerySeat:{
+          deps:['jquery']
+        },
         underscore: {
             exports: '_'
         },
